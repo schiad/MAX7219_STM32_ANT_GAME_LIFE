@@ -129,49 +129,19 @@ void Maxim_Map(SPI_HandleTypeDef *hspi, uint8_t *map) {
 void init_map(struct St_Ant* ant, uint8_t init) {
 	ant->y = 0;
 	switch (init) {
-	case 0:
+	case 0:			// Create a blank map
 		while ((ant->y) < 8) {
 			ant->map[ant->y] = 0;
 			ant->y++;
 		}
 		break;
-	case 1:
+	case 1:			//Create map
 		while ((ant->y) < 8) {
 			ant->map[ant->y] = 0b10101010;
 			ant->y++;
 		}
 		break;
-	case 2:
-		ant->map[0] = 0b00000000;
-		ant->map[1] = 0b00000000;
-		ant->map[2] = 0b00000000;
-		ant->map[3] = 0b01110000;
-		ant->map[4] = 0b00111000;
-		ant->map[5] = 0b00000000;
-		ant->map[6] = 0b00000000;
-		ant->map[7] = 0b00000000;
-		break;
-	case 3:
-		ant->map[4] = 0b01000000;
-		ant->map[5] = 0b00100000;
-		ant->map[6] = 0b11100000;
-		ant->map[7] = 0b00000000;
-		ant->map[0] = 0b00000000;
-		ant->map[1] = 0b00000000;
-		ant->map[2] = 0b00000000;
-		ant->map[3] = 0b00000000;
-		break;
-	case 4:
-		ant->map[0] = 0b01000000;
-		ant->map[1] = 0b01000000;
-		ant->map[2] = 0b01000000;
-		ant->map[3] = 0b00000000;
-		ant->map[4] = 0b00000000;
-		ant->map[5] = 0b00001110;
-		ant->map[6] = 0b00000000;
-		ant->map[7] = 0b00000000;
-		break;
-	case 5:
+	case 5:			// create a randomness map
 		while ((ant->y) < 8) {
 			HAL_ADC_Start(&hadc1);
 			while (HAL_ADC_PollForConversion(&hadc1, HAL_MAX_DELAY)) {
@@ -181,6 +151,57 @@ void init_map(struct St_Ant* ant, uint8_t init) {
 			ant->map[ant->y] = rand() & 0b11111111;
 			ant->y++;
 		}
+		break;
+	case 2:			// Le crapeau
+		ant->map[0] = 0b00000000;
+		ant->map[1] = 0b00000000;
+		ant->map[2] = 0b00000000;
+		ant->map[3] = 0b01110000;
+		ant->map[4] = 0b00111000;
+		ant->map[5] = 0b00000000;
+		ant->map[6] = 0b00000000;
+		ant->map[7] = 0b00000000;
+		break;
+	case 3:			// Le planneur
+		ant->map[4] = 0b01000000;
+		ant->map[5] = 0b00100000;
+		ant->map[6] = 0b11100000;
+		ant->map[7] = 0b00000000;
+		ant->map[0] = 0b00000000;
+		ant->map[1] = 0b00000000;
+		ant->map[2] = 0b00000000;
+		ant->map[3] = 0b00000000;
+		break;
+	case 4:			// 2 Clignotants
+		ant->map[0] = 0b01000000;
+		ant->map[1] = 0b01000000;
+		ant->map[2] = 0b01000000;
+		ant->map[3] = 0b00000000;
+		ant->map[4] = 0b00000000;
+		ant->map[5] = 0b00001110;
+		ant->map[6] = 0b00000000;
+		ant->map[7] = 0b00000000;
+		break;
+
+	case 6:			// La balise
+		ant->map[0] = 0b00000000;
+		ant->map[1] = 0b00000000;
+		ant->map[2] = 0b00000000;
+		ant->map[3] = 0b00001100;
+		ant->map[4] = 0b00001100;
+		ant->map[5] = 0b00110000;
+		ant->map[6] = 0b00110000;
+		ant->map[7] = 0b00000000;
+		break;
+	case 7:			// Vaisseau
+		ant->map[0] = 0b00000000;
+		ant->map[1] = 0b00000000;
+		ant->map[2] = 0b00111100;
+		ant->map[3] = 0b01000100;
+		ant->map[4] = 0b00000100;
+		ant->map[5] = 0b01001000;
+		ant->map[6] = 0b00000000;
+		ant->map[7] = 0b00000000;
 		break;
 	default:
 		break;
@@ -281,7 +302,7 @@ void life_game(struct St_Ant* ant) {
 		x = 0;
 		while (x < 8) {
 			nearby = cell_near(&tmp_map[0], ant->y, x);
-			if (nearby == 3) {                     // && (tmp_map[y] & (1 << x))
+			if (nearby == 3) {
 				ant->map[ant->y] |= (1 << x);
 				if (tmp_map[ant->y] && (1 << x)) {
 					;
@@ -289,7 +310,7 @@ void life_game(struct St_Ant* ant) {
 					ant->x = 10;
 				}
 			}
-			if ((nearby > 3) || (nearby < 2)) {   // && !(tmp_map[y] & (1 << x))
+			if ((nearby > 3) || (nearby < 2)) {
 				ant->map[ant->y] &= ~(1 << x);
 			}
 			x++;
@@ -343,7 +364,7 @@ int main(void) {
 
 	/* Infinite loop */
 	/* USER CODE BEGIN WHILE */
-	init_map(&ant1, 5);
+	init_map(&ant1, 7);
 	HAL_TIM_Base_Start_IT(&htim1);
 	ant1.x = 7;
 	ant1.y = 7;
@@ -546,6 +567,7 @@ static void MX_TIM1_Init(void) {
  * Enable DMA controller clock
  */
 static void MX_DMA_Init(void) {
+
 	/* DMA controller clock enable */
 	__HAL_RCC_DMA1_CLK_ENABLE()
 	;
