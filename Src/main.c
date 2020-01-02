@@ -135,7 +135,7 @@ void init_map(struct St_Ant* ant, uint8_t init) {
 			ant->y++;
 		}
 		break;
-	case 1:			//Create map
+	case 1:			//Create zebra map
 		while ((ant->y) < 8) {
 			ant->map[ant->y] = 0b10101010;
 			ant->y++;
