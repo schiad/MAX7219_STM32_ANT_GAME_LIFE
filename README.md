@@ -1,6 +1,6 @@
 # MAX7219_STM32_ANT_GAME_LIFE
 
-This two in one 
+This two in one project langton's ant and the Conway's Game of Life.  
 
 ## Material list
 
@@ -38,7 +38,7 @@ The 5th function called are life_game or Ant one of it is commented :
   
 ## Future features and bug to resolve
 
-- [ ] Add other init structures for maps like 
+- [ ] Add other init structures for maps like Oscillators and Spaceships (Named in french in the code :)  
 
 ## Libararies and programs used to init project
 
