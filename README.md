@@ -1,6 +1,7 @@
 # MAX7219_STM32_ANT_GAME_LIFE
 
 This two in one project langton's ant and the Conway's Game of Life.  
+This project was made with periodic boundary conditions.  
 
 ## Material list
 
